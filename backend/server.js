@@ -61,5 +61,16 @@ app.get("/api/messages", async (req, res) => {
   }
 });
 
+// DELETE /api/messages/clear
+app.delete("/api/messages/clear", async (req, res) => {
+  try {
+    await pool.query("DELETE FROM messages;");
+    res.json({ status: "cleared" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "clear_failed" });
+  }
+});
+
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`Server running on ${port}`));
