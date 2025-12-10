@@ -5,14 +5,21 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <div id="advChannel" onClick="changeChannel('adv')">Adv CS</div>
+  <div id="cs1Channel" onClick="changeChannel('cs1')">CS1</div>
+  <div id="artChannel" onClick="changeChannel('art')">Art & CS</div>
+
   <div id="messages"></div>
 
   <p><button onClick="clearMessages()">Clear Messages</button></p>
 
-  <input id="name" placeholder=""><br>
-  <textarea id="input" placeholder="Type a message"></textarea>
-  <input type="checkbox" id="isCode"> Code
-  <button onclick="sendMessage()">Send</button>
+  <div class="fixed-bottom-div">
+    <input id="name" placeholder=""><br>
+    <textarea id="input" placeholder="Type a message"></textarea>
+    <input type="checkbox" id="isCode"> Code
+    <button onclick="sendMessage()">Send</button>
+  </div>
   
   <script src="app.js"></script>
 </body>

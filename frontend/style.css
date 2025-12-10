@@ -7,3 +7,18 @@ pre, code {
   white-space: pre-wrap;
   font-family: monospace;
 }
+
+#messages {
+    margin-bottom: 100px;
+}
+
+.fixed-bottom-div {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background-color: #f0f0f0;
+  padding: 10px; 
+  z-index: 999;
+}

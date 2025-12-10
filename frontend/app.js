@@ -1,7 +1,7 @@
 // Put in real backend URL once deployed on Render
 const API = "https://studious-space-dollop-jjp6rp7w9q5hqp66-3000.app.github.dev/api";
 
-let channel = "cs1"; // other channels: adv, art
+let userChannel = "cs1"; // other channels: "adv", "art"
 
 function loadName() {
     if (localStorage.getItem("username")) {
@@ -9,7 +9,11 @@ function loadName() {
     }
 }
 
-async function loadMessages() {
+function changeChannel(channel) {
+    loadMessages(channel);
+}
+
+async function loadMessages(channel=userChannel) {
     const res = await fetch(`${API}/messages?channel=${channel}`);
     const messages = await res.json();
     console.log("Fetched messages:", messages);
@@ -28,7 +32,6 @@ function generateHTML(messages) {
     const container = document.createElement("div");
 
     for (m of messages) {
-        console.log("CHAR CODES:", m.message.split("").map(c => c.charCodeAt(0)));
 
         const wrapper = document.createElement("div");
         wrapper.classList.add("message");
@@ -56,12 +59,6 @@ function generateHTML(messages) {
 
         container.appendChild(wrapper);
     }
-
-    const testPre = document.createElement("pre");
-    const testCode = document.createElement("code");
-    testCode.textContent = "line1\nline2\n    line3";
-    testPre.appendChild(testCode);
-    document.getElementById("messages").appendChild(testPre);
 
     return container;
 }
@@ -100,5 +97,5 @@ async function clearMessages() {
 }
 
 loadName();
-loadMessages();
+loadMessages(userChannel);
 setInterval(loadMessages, 3000);
