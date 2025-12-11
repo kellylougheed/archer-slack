@@ -4,7 +4,9 @@ import pkg from "pg";
 const { Pool } = pkg;
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: "*"
+}));
 app.use(express.json());
 
 const pool = new Pool({
