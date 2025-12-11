@@ -1,5 +1,8 @@
-// Put in real backend URL once deployed on Render
-const API = "https://studious-space-dollop-jjp6rp7w9q5hqp66-3000.app.github.dev/api";
+// Development API endpoint
+//const API = "https://studious-space-dollop-jjp6rp7w9q5hqp66-3000.app.github.dev/api";
+
+// Production API endpoint
+const API = "https://archer-slack.onrender.com/api";
 
 let storedUsername = localStorage.getItem("username") || "";
 let userChannel = localStorage.getItem("channel") || "cs1";
