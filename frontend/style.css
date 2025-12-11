@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap');
 
 :root {
       --primary-color: #4A154B;
@@ -8,11 +9,69 @@
 
 body {
     font-family: var(--font-stack);
+    margin: 0;
+    border: 15px solid var(--primary-color);
+}
+
+h1 {
+    font-family: var(--font-stack);
+    text-transform: lowercase;
+    background-color: var(--primary-color);
+    margin: 0;
+    color: white;
+    padding: 5px;
+    font-size: 0.75em;
+    text-align: center;
 }
 
 textarea {
-    width: 100%;
-    height: 50px;
+    width: 95%;
+    height: 75px;
+    font-family: var(--font-stack);
+    box-sizing: border-box;
+}
+
+textarea, input[type="text"], input[type="checkbox"], button {
+    background-color: white;
+    border: 1px solid #d0d0d0;
+    border-radius: 8px;
+    padding: 8px;
+}
+
+input[type="checkbox"] {
+    background-color: #f0f0f0;
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+    background-color: var(--primary-color);
+    accent-color: var(--primary-color);
+}
+
+button {
+    cursor: pointer;
+    font-family: var(--font-stack);
+}
+
+button:hover {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+textarea, input[type="text"], button {
+  letter-spacing: 1px;
+}
+
+.username {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.messageBody {
+  margin-left: 10px;
 }
 
 pre, code {
@@ -20,10 +79,36 @@ pre, code {
   font-family: monospace;
 }
 
+.messageBody.codeBody {
+  background-color: #f4f4f4;
+  line-height: 25px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+}
+
+#channelsContainer {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 0;
+}
+
+#channelsContainer div {
+  font-family: 'Abril Fatface';
+  text-align: center;
+  font-size: 3em;
+  background-color: #ccc;
+  color: white;
+}
+
+#channelsContainer div.selected {
+  background-color: var(--primary-color);
+  color: white;
+}
+
 /* The whole container */
 #messages {
     margin: 25px;
-    margin-bottom: 100px;
+    padding-bottom: 100px;
 }
 
 /* Each message's wrapper */
@@ -40,4 +125,5 @@ div.message {
   background-color: var(--primary-color);
   padding: 10px; 
   z-index: 999;
+  color: white;
 }

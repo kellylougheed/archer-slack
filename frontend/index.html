@@ -6,18 +6,21 @@
 </head>
 <body>
 
-  <div id="advChannel" onClick="changeChannel('adv')">Adv CS</div>
-  <div id="cs1Channel" onClick="changeChannel('cs1')">CS1</div>
-  <div id="artChannel" onClick="changeChannel('art')">Art & CS</div>
+  <h1>Archer Slack</h1>
 
+  <div id="channelsContainer">
+    <div id="advChannel" onClick="changeChannel('adv')">Adv CS</div>
+    <div id="cs1Channel" onClick="changeChannel('cs1')">CS1</div>
+    <div id="artChannel" onClick="changeChannel('art')">Art & CS</div>
+  </div>
+  
   <div id="messages"></div>
 
   <p><button onClick="clearMessages()">Clear Messages</button></p>
 
   <div class="fixed-bottom-div">
-    <input id="name" placeholder=""><br>
-    <textarea id="input" placeholder="Type a message"></textarea>
-    <input type="checkbox" id="isCode"> Code
+    <input type="text" id="name" placeholder=""> <input type="checkbox" id="isCode"> Code<br>
+    <textarea id="input" placeholder="Type a message"></textarea><br>
     <button onclick="sendMessage()">Send</button>
   </div>
   

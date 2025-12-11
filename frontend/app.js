@@ -42,33 +42,30 @@ function generateHTML(messages) {
 
         wrapper.appendChild(username);
 
+        const messageText = document.createElement("div");
+        messageText.classList.add("messageBody");
+
         if (!m.is_code) {
-            // normal message lives in a div
-            const messageText = document.createElement("div");
+            // normal message lives in the div
             messageText.textContent = m.message;
             wrapper.appendChild(messageText);
         } else {
+            messageText.classList.add("codeBody");
             // wrap code in pre, code
             const pre = document.createElement("pre");
             const code = document.createElement("code");
 
             code.textContent = m.message;
             pre.appendChild(code);
-            wrapper.appendChild(pre);
+            pre.classList.add("messageBody");
+            messageText.appendChild(pre);
+            wrapper.appendChild(messageText);
         }
 
         container.appendChild(wrapper);
     }
 
     return container;
-}
-
-function escapeHTML(str) {
-  return str
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    
 }
 
 async function sendMessage() {
