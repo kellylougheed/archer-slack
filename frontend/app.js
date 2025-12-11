@@ -43,6 +43,11 @@ async function loadMessages(channel=userChannel) {
     }
 
     messagesDiv.appendChild(generateHTML(messages));
+
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth"
+    });
 }
 
 function generateHTML(messages) {
