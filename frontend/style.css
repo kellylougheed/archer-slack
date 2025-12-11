@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap');
 
 :root {
       --primary-color: #4A154B;
-      --font-stack: "Roboto", Arial, sans-serif;
+      --font-stack: "Lato", Arial, sans-serif;
     }
 
 
@@ -11,17 +11,8 @@ body {
     font-family: var(--font-stack);
     margin: 0;
     border: 15px solid var(--primary-color);
-}
-
-h1 {
-    font-family: var(--font-stack);
-    text-transform: lowercase;
+    height: 100%;
     background-color: var(--primary-color);
-    margin: 0;
-    color: white;
-    padding: 5px;
-    font-size: 0.75em;
-    text-align: center;
 }
 
 textarea {
@@ -86,10 +77,32 @@ pre, code {
   border-radius: 5px;
 }
 
+h1 {
+    font-family: var(--font-stack);
+    text-transform: lowercase;
+    background-color: var(--primary-color);
+    margin: 0;
+    color: white;
+    padding: 5px;
+    font-size: 0.9em;
+    text-align: center;
+    position: fixed;
+    top: 0px;
+    z-index: 1001;
+    width: 100%;
+}
+
 #channelsContainer {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   margin: 0;
+  position: fixed;
+  top: 28px;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: white;
 }
 
 #channelsContainer div {
@@ -105,13 +118,16 @@ pre, code {
   color: white;
 }
 
-/* The whole container */
+/* whole container */
 #messages {
     margin: 25px;
     padding-bottom: 100px;
+    padding-top: 50px;
+    min-height: 500px;
+    background-color: white;
 }
 
-/* Each message's wrapper */
+/* each message's wrapper */
 div.message {
     margin: 25px;
 }

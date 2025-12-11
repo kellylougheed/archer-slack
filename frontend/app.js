@@ -1,7 +1,8 @@
 // Put in real backend URL once deployed on Render
 const API = "https://studious-space-dollop-jjp6rp7w9q5hqp66-3000.app.github.dev/api";
 
-let userChannel = "cs1"; // other channels: "adv", "art"
+let userChannel = localStorage.getItem("channel") || "cs1";
+let channelNames = ["cs1", "adv", "art"];
 
 function loadName() {
     if (localStorage.getItem("username")) {
@@ -10,6 +11,22 @@ function loadName() {
 }
 
 function changeChannel(channel) {
+    // save selected channel
+    userChannel = channel;
+    localStorage.setItem("channel", channel);
+
+    // change selected channel styles, remove styles from previous selected channel
+    for (let i = 0; i < channelNames.length; i++) {
+        const chName = channelNames[i];
+        const chDiv = document.getElementById(chName);
+        if (chName === channel) {
+            chDiv.classList.add("selected");
+        } else {
+            chDiv.classList.remove("selected");
+        }
+    }
+
+    // refresh
     loadMessages(channel);
 }
 
@@ -70,9 +87,9 @@ function generateHTML(messages) {
 
 async function sendMessage() {
     const username = localStorage.getItem("username") || document.getElementById("name").value;
-    const message = document.getElementById("input").value;
     localStorage.setItem("username", username);
 
+    const message = document.getElementById("input").value;
     const isCode = document.getElementById("isCode").checked;
 
     await fetch(`${API}/messages`, {
@@ -94,5 +111,7 @@ async function clearMessages() {
 }
 
 loadName();
+changeChannel(userChannel);
 loadMessages(userChannel);
+
 setInterval(loadMessages, 3000);
