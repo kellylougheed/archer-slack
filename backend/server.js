@@ -61,7 +61,7 @@ app.get("/api/messages", async (req, res) => {
   }
 });
 
-// DELETE /api/messages/clear
+// DELETE /api/messages/clear - delete ALL messages
 app.delete("/api/messages/clear", async (req, res) => {
   try {
     await pool.query("DELETE FROM messages;");
@@ -69,6 +69,38 @@ app.delete("/api/messages/clear", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "clear_failed" });
+  }
+});
+
+// DELETE /api/messages/channel/:channel - delete all messages from a channel
+app.delete("/api/messages/channel/:channel", async (req, res) => {
+  const { channel } = req.params;
+
+  try {
+    await pool.query(
+      `DELETE FROM messages WHERE channel = $1`,
+      [channel]
+    );
+    res.json({ status: "cleared", channel });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "clear_failed" });
+  }
+});
+
+// DELETE /api/messages/:id - delete a specific message by ID
+app.delete("/api/messages/:id", async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const result = await pool.query(
+      `DELETE FROM messages WHERE id = $1`,
+      [id]
+    );
+    res.json({ status: "deleted", id });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "delete_failed" });
   }
 });
 
