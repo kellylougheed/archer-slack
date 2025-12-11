@@ -10,6 +10,10 @@ function loadName() {
     }
 }
 
+document.getElementById("name").addEventListener("change", e => {
+    localStorage.setItem("username", e.target.value);
+}
+
 function changeChannel(channel) {
     // save selected channel
     userChannel = channel;
