@@ -63,7 +63,7 @@ h1 {
   grid-template-columns: repeat(3, 1fr);
   margin: 0;
   position: fixed;
-  top: 28px;
+  top: 26px;
   left: 0;
   right: 0;
   width: 100%;
@@ -113,6 +113,7 @@ div.message {
 
 /* form stuff */
 textarea {
+    margin-top: 5px;
     width: 90%;
     height: 75px;
     font-family: var(--font-stack);
