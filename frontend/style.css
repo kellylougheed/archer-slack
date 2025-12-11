@@ -143,3 +143,10 @@ div.message {
   z-index: 999;
   color: white;
 }
+
+.noMessages {
+    text-align: center;
+    color: #666;
+    font-style: italic;
+    margin-top: 50px;
+}

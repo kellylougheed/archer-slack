@@ -57,6 +57,14 @@ async function loadMessages(channel=userChannel) {
 function generateHTML(messages) {
     const container = document.createElement("div");
 
+    if (messages.length === 0) {
+        const noMsg = document.createElement("div");
+        noMsg.classList.add("noMessages");
+        noMsg.textContent = "No messages yet.";
+        container.appendChild(noMsg);
+        return container;
+    }
+
     for (m of messages) {
 
         const wrapper = document.createElement("div");
