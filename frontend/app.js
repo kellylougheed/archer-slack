@@ -1,18 +1,26 @@
 // Put in real backend URL once deployed on Render
 const API = "https://studious-space-dollop-jjp6rp7w9q5hqp66-3000.app.github.dev/api";
 
+let storedUsername = localStorage.getItem("username") || "";
 let userChannel = localStorage.getItem("channel") || "cs1";
 let channelNames = ["cs1", "adv", "art"];
+
+let keystrokes = [];
+
+// control whether or not you can see delete functionality
+let adminMode = false;
 
 function loadName() {
     if (localStorage.getItem("username")) {
         document.getElementById("name").value = localStorage.getItem("username");
+        storedUsername = localStorage.getItem("username");
     }
 }
 
 document.getElementById("name").addEventListener("change", e => {
     localStorage.setItem("username", e.target.value);
-})
+    storedUsername = e.target.value;
+});
 
 function changeChannel(channel) {
     // save selected channel
@@ -108,6 +116,9 @@ function generateHTML(messages) {
 
         wrapper.appendChild(usernameTimestampContainer);
 
+        const messageAndDeleteContainer = document.createElement("div");
+        messageAndDeleteContainer.classList.add("messageAndDeleteContainer");
+
         const messageText = document.createElement("div");
         messageText.classList.add("messageBody");
 
@@ -128,6 +139,25 @@ function generateHTML(messages) {
             wrapper.appendChild(messageText);
         }
 
+        // delete button
+        let deleteBtn;
+        if (storedUsername == m.username || adminMode) {
+            deleteBtn = document.createElement("button");
+            deleteBtn.classList.add("deleteButton");
+            deleteBtn.textContent = "X";
+            deleteBtn.onclick = () => deleteMessage(m.id);
+            wrapper.appendChild(deleteBtn);
+        }
+
+        messageAndDeleteContainer.appendChild(messageText);
+
+        console.log(storedUsername, m.username, adminMode);
+
+        if (storedUsername == m.username || adminMode) {
+            messageAndDeleteContainer.appendChild(deleteBtn);
+        }
+        
+        wrapper.appendChild(messageAndDeleteContainer);
         container.appendChild(wrapper);
     }
 
@@ -151,12 +181,45 @@ async function sendMessage() {
         })
     });
 
+    document.getElementById("input").value = "";
+
+    loadMessages();
+}
+
+function toggleAdminMode() {
+    if (adminMode) {
+        adminMode = false;
+        document.getElementById("deleteButtons").style.visibility = "hidden";
+    } else {
+        adminMode = true;
+        document.getElementById("deleteButtons").style.visibility = "visible"; 
+    }
     loadMessages();
 }
 
 async function clearMessages() {
     await fetch(`${API}/messages/clear`, { method: "DELETE" });
+    loadMessages(); // reload
 }
+
+async function clearChannelMessages(channel) {
+    await fetch(`${API}/messages/channel/${channel}`, { method: "DELETE" });
+    loadMessages(); // reload
+}
+
+async function deleteMessage(messageId) {
+    await fetch(`${API}/messages/${messageId}`, { method: "DELETE" });
+    loadMessages(); // reload
+}
+
+document.addEventListener("keydown", e => {
+    keystrokes.push(e.key);
+    let text = keystrokes.join("");
+    if (text.endsWith("adminmode")) {
+        toggleAdminMode();
+        keystrokes = [];
+    }
+});
 
 loadName();
 changeChannel(userChannel);

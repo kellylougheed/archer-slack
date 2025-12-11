@@ -16,12 +16,18 @@
   
   <div id="messages"></div>
 
-  <p><button onClick="clearMessages()">Clear All Messages</button></p>
-
   <div class="fixed-bottom-div">
     <input type="text" id="name" placeholder=""> <input type="checkbox" id="isCode"> Code<br>
     <textarea id="input" placeholder="Type a message"></textarea><br>
-    <button onclick="sendMessage()">Send</button>
+    <div id="buttonGrid">
+      <button onclick="sendMessage()">Send</button>
+      <span id="deleteButtons">
+        <button onClick="clearMessages()">Clear All Messages</button>
+        <button onClick="clearChannelMessages(userChannel)">Clear Channel Messages</button>
+      </span>
+    </div>
+    
+
   </div>
   
   <script src="app.js"></script>
