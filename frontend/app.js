@@ -12,7 +12,7 @@ function loadName() {
 
 document.getElementById("name").addEventListener("change", e => {
     localStorage.setItem("username", e.target.value);
-}
+})
 
 function changeChannel(channel) {
     // save selected channel
@@ -95,9 +95,8 @@ function generateHTML(messages) {
 }
 
 async function sendMessage() {
+    const channel = localStorage.getItem("channel");
     const username = localStorage.getItem("username") || document.getElementById("name").value;
-    localStorage.setItem("username", username);
-
     const message = document.getElementById("input").value;
     const isCode = document.getElementById("isCode").checked;
 
