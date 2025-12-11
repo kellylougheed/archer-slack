@@ -70,11 +70,43 @@ function generateHTML(messages) {
         const wrapper = document.createElement("div");
         wrapper.classList.add("message");
 
-        const username = document.createElement("div");
+        const usernameTimestampContainer = document.createElement("div");
+        usernameTimestampContainer.classList.add("usernameTimestampContainer");
+
+        const username = document.createElement("span");
         username.classList.add("username");
         username.textContent = m.username;
+        
+        // timestamp (format: "Mon, Dec 8 @ 12:25 PM")
+        const ts = document.createElement("span");
+        if (m.timestamp) {
+            ts.classList.add("timestamp");
+            try {
+                const d = new Date(m.timestamp);
+                const dayShort = d.toLocaleDateString(undefined, { weekday: 'short' });
+                const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+                const mon = monthNames[d.getMonth()];
+                const day = d.getDate();
+                let hours = d.getHours();
+                const minutes = d.getMinutes().toString().padStart(2, '0');
+                const ampm = hours >= 12 ? 'PM' : 'AM';
+                hours = hours % 12 || 12;
+                if (d.toDateString() !== new Date().toDateString()) {
+                    // day is NOT today
+                    ts.textContent = `${dayShort}, ${mon} ${day} @ ${hours}:${minutes} ${ampm}`;
+                } else {
+                    // day IS today
+                    ts.textContent = `Today @ ${hours}:${minutes} ${ampm}`;
+                }
+            } catch (e) {
+                ts.textContent = m.timestamp;
+            }
+        }
 
-        wrapper.appendChild(username);
+        usernameTimestampContainer.appendChild(username);
+        usernameTimestampContainer.appendChild(ts);
+
+        wrapper.appendChild(usernameTimestampContainer);
 
         const messageText = document.createElement("div");
         messageText.classList.add("messageBody");

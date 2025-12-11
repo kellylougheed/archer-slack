@@ -4,8 +4,7 @@
 :root {
       --primary-color: #4A154B;
       --font-stack: "Lato", Arial, sans-serif;
-    }
-
+}
 
 body {
     font-family: var(--font-stack);
@@ -59,6 +58,13 @@ textarea, input[type="text"], button {
 .username {
   font-weight: bold;
   margin-bottom: 10px;
+}
+
+.timestamp {
+  font-size: 0.85em;
+  color: #666;
+  margin-bottom: 8px;
+  margin-left: 10px;
 }
 
 .messageBody {
@@ -149,4 +155,8 @@ div.message {
     color: #666;
     font-style: italic;
     margin-top: 50px;
+}
+
+.usernameTimestampContainer {
+    margin-bottom: 10px;
 }
