@@ -185,6 +185,7 @@ async function sendMessage() {
     });
 
     document.getElementById("input").value = "";
+    document.getElementById("isCode").checked = false;
 
     loadMessages();
 }
