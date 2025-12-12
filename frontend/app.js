@@ -29,7 +29,10 @@ function changeChannel(channel) {
     }
 
     // refresh
-    loadMessages(channel);
+    loadMessages(userChannel).then(() => {
+        // scroll after initial load
+        setTimeout(scrollToBottom, 200);
+    });
 }
 
 function turnOnAdminMode() {
