@@ -161,9 +161,7 @@ async function sendMessage() {
 
     const channel = localStorage.getItem("channel");
     let username = storedUsername;
-    if (username === "Kelly Lougheed") {
-        username = "Ms. Lougheed";
-    }
+    
     const message = document.getElementById("input").value;
     const isCode = document.getElementById("isCode").checked;
 
@@ -232,7 +230,7 @@ async function checkLogin() {
     storedUsername = user ? user.name : "";
     window.user = user;
 
-    if (storedUsername == "Kelly Lougheed") {
+    if (user.name == "Ms. Lougheed") {
         turnOnAdminMode();
     }
 

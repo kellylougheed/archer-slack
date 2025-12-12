@@ -30,10 +30,10 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Serve static files from frontend
+// serve static files from frontend
 app.use(express.static(path.join(process.cwd(), '../frontend')));
 
-// Cookie to remember user sessions
+// cookie to remember user sessions
 app.use(session({
   store: new PgSession({
     pool: pool,
@@ -199,10 +199,32 @@ app.get("/auth/google/callback", async (req, res) => {
     const email = payload.email;
     const name = payload.name;
 
-    // store session and user
-    req.session.user = { email, name };
+    // sanitize data before storing
+    const nameParts = name.split(' ');
+    const firstName = nameParts[0];
+    const lastInitial = nameParts.length > 1 ? nameParts[nameParts.length - 1][0] : '';
+    let displayName = lastInitial ? `${firstName} ${lastInitial}.` : firstName;
     
-    console.log("Saving session for user:", name);
+    if (nameParts[0] === "Kelly" && nameParts[1] === "Lougheed") {
+      displayName = "Ms. Lougheed";
+    }
+    
+    let emailUsername = email.split('@')[0]; // Just the part before @
+    // star out part of email for privacy
+    if (emailUsername.length > 2) {
+      emailUsername = emailUsername.charAt(0) + '***' + emailUsername.charAt(emailUsername.length - 1);
+    } else {
+      emailUsername = emailUsername.charAt(0) + '***';
+    }
+
+    // store session and user with first name + last initial and censored email
+    req.session.user = { 
+      email: emailUsername,
+      name: displayName 
+    };
+    // now this is the email and name coming in from the backend/google
+    
+    console.log("Saving session for user:", displayName);
     console.log("Session ID:", req.sessionID);
 
     // save session before redirect due to multiple domains issue
