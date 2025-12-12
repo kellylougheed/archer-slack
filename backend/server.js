@@ -3,6 +3,7 @@ import cors from "cors";
 import pkg from "pg";
 import { OAuth2Client } from "google-auth-library";
 import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
 import path from "path";
 
 // Development
@@ -14,6 +15,13 @@ const url = "https://archer-slack.onrender.com";
 const frontendURL = url;
 
 const { Pool } = pkg;
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false } // required by most hosted DBs
+});
+
+const PgSession = connectPgSimple(session);
 
 const app = express();
 app.use(cors({
@@ -27,6 +35,10 @@ app.use(express.static(path.join(process.cwd(), '../frontend')));
 
 // Cookie to remember user sessions
 app.use(session({
+  store: new PgSession({
+    pool: pool,
+    createTableIfMissing: true
+  }),
   secret: process.env.SESSION_SECRET || "dev-secret",
   resave: false,
   saveUninitialized: false,
@@ -37,11 +49,6 @@ app.use(session({
     maxAge: 7 * 24 * 60 * 60 * 1000  // 7 days
   }
 }));
-
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false } // required by most hosted DBs
-});
 
 app.get("/", (req, res) => res.send("Backend + DB is running!"));
 
