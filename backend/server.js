@@ -147,9 +147,29 @@ app.delete("/api/messages/channel/:channel", async (req, res) => {
 // DELETE /api/messages/:id - delete a specific message by ID
 app.delete("/api/messages/:id", async (req, res) => {
   const { id } = req.params;
+  const currentUser = req.session.user?.name;
+  const isAdmin = req.session.user?.isAdmin;
 
   try {
-    const result = await pool.query(
+    // First, fetch the message to check ownership
+    const message = await pool.query(
+      `SELECT username FROM messages WHERE id = $1`,
+      [id]
+    );
+
+    if (message.rows.length === 0) {
+      return res.status(404).json({ error: "message_not_found" });
+    }
+
+    const messageOwner = message.rows[0].username;
+
+    // Allow deletion if user is admin OR message owner
+    if (!isAdmin && currentUser !== messageOwner) {
+      return res.status(403).json({ error: "unauthorized" });
+    }
+
+    // Delete the message
+    await pool.query(
       `DELETE FROM messages WHERE id = $1`,
       [id]
     );
