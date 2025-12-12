@@ -1,5 +1,8 @@
-// API endpoint for dev and prod
-const API = "/api";
+// Development API endpoint
+// const API = "/api";
+
+// Production API endpoint
+const API = "https://archer-slack.onrender.com/api";
 
 let storedUsername = "";
 

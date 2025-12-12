@@ -6,12 +6,12 @@ import session from "express-session";
 import path from "path";
 
 // Development
-const url = "https://studious-space-dollop-jjp6rp7w9q5hqp66-3000.app.github.dev";
-const frontendURL = url;
+// const url = "https://studious-space-dollop-jjp6rp7w9q5hqp66-3000.app.github.dev";
+// const frontendURL = url;
 
 // Production
-// const url = "https://archer-slack.onrender.com";
-// const frontendURL = "https://archerslack.onrender.com";
+const url = "https://archer-slack.onrender.com";
+const frontendURL = "https://archerslack.onrender.com";
 
 const { Pool } = pkg;
 
@@ -22,8 +22,8 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Serve static files from frontend
-app.use(express.static(path.join(process.cwd(), '../frontend')));
+// Serve static files from frontend - comment in during DEVELOPMENT
+// app.use(express.static(path.join(process.cwd(), '../frontend')));
 
 // Cookie to remember user sessions
 app.use(session({
