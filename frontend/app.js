@@ -50,11 +50,6 @@ async function loadMessages(channel=userChannel) {
     }
 
     messagesDiv.appendChild(generateHTML(messages));
-
-    window.scrollTo({
-      top: document.body.scrollHeight,
-      behavior: "smooth"
-    });
 }
 
 function generateHTML(messages) {
@@ -188,6 +183,7 @@ async function sendMessage() {
     document.getElementById("isCode").checked = false;
 
     loadMessages();
+    scrollToBottom();
 }
 
 async function clearMessages() {
@@ -250,9 +246,19 @@ async function checkLogin() {
   }
 }
 
+function scrollToBottom() {
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth"
+    });
+}
+
 checkLogin();
 
 changeChannel(userChannel);
 loadMessages(userChannel);
+
+// only scroll to bottom the first time
+scrollToBottom();
 
 setInterval(loadMessages, 3000);
