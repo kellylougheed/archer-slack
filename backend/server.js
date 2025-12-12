@@ -199,6 +199,9 @@ app.get("/auth/google/callback", async (req, res) => {
 
     // store session and user
     req.session.user = { email, name };
+    
+    console.log("Saving session for user:", name);
+    console.log("Session ID:", req.sessionID);
 
     // save session before redirect due to multiple domains issue
     req.session.save((err) => {
@@ -206,6 +209,7 @@ app.get("/auth/google/callback", async (req, res) => {
         console.error("Session save error:", err);
         return res.status(500).send("Session save failed");
       }
+      console.log("Session saved successfully");
       res.redirect(frontendURL);
     });
   } catch (e) {
@@ -215,6 +219,10 @@ app.get("/auth/google/callback", async (req, res) => {
 });
 
 app.get("/api/me", (req, res) => {
+  console.log("Session check:", req.session);
+  console.log("Session ID:", req.sessionID);
+  console.log("User in session:", req.session?.user);
+  
   if (!req.session.user) {
     return res.json(null);
   }
