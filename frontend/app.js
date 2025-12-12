@@ -199,6 +199,11 @@ async function clearChannelMessages(channel) {
     loadMessages(); // reload
 }
 
+async function deleteMessage(messageId) {
+    await fetch(`${API}/messages/${messageId}`, { method: "DELETE", credentials: "include" });
+    loadMessages(); // reload
+}
+
 async function logout() {
   await fetch(`${API}/logout`, {
     method: "POST",
