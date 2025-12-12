@@ -32,8 +32,8 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: true, // Required for cross-origin cookies over HTTPS
-    sameSite: 'none', // Allow cross-origin cookies
+    secure: true, // required for cross-origin cookies over HTTPS
+    sameSite: 'none', // allow cross-origin cookies
     maxAge: 7 * 24 * 60 * 60 * 1000  // 7 days
   }
 }));
@@ -190,10 +190,17 @@ app.get("/auth/google/callback", async (req, res) => {
     const email = payload.email;
     const name = payload.name;
 
-    // Store session
+    // store session and user
     req.session.user = { email, name };
 
-    res.redirect(frontendURL);
+    // save session before redirect due to multiple domains issue
+    req.session.save((err) => {
+      if (err) {
+        console.error("Session save error:", err);
+        return res.status(500).send("Session save failed");
+      }
+      res.redirect(frontendURL);
+    });
   } catch (e) {
     console.error("OAuth error:", e);
     res.status(500).send("Authentication failed");
