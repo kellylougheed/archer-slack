@@ -19,8 +19,7 @@
   <div id="messages"></div>
 
   <div class="fixed-bottom-div">
-    <input type="text" id="name" placeholder=""> <input type="checkbox" id="isCode"> Code
-    
+
     <span id="loginStatus"></span>
     <a id="signInBtn" href="/auth/google">
     <button>Sign in with Google</button>
@@ -30,7 +29,8 @@
     <br>
     <textarea id="input" placeholder="Type a message"></textarea><br>
     <div id="buttonGrid">
-      <button onclick="sendMessage()">Send</button>
+      <input type="checkbox" id="isCode"><label for="isCode">Code</label>
+      <button id="sendButton" onclick="sendMessage()">Send</button>
       <span id="deleteButtons">
         <button onClick="clearMessages()">Clear All Messages</button>
         <button onClick="clearChannelMessages(userChannel)">Clear Channel Messages</button>

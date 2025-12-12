@@ -55,8 +55,8 @@ app.get("/test-db", async (req, res) => {
 });
 
 app.post("/api/messages", async (req, res) => {
-  const { channel, message, isCode } = req.body;
-  const username = req.session.user.name; // auto from login
+  const { channel, username, message, isCode } = req.body;
+  //const username = req.session.user.name; // auto from login
 
   try {
     console.log("Incoming:", req.body);
@@ -190,20 +190,6 @@ app.get("/auth/google/callback", async (req, res) => {
 
     // Store session
     req.session.user = { email, name };
-
-    console.log("Logged in user:", req.session.user);
-
-    // TODO: store user in DB (if new) or fetch existing user
-    // e.g.
-    // const result = await pool.query(
-    //    "INSERT INTO users (email, name) VALUES ($1, $2)
-    //     ON CONFLICT (email) DO UPDATE SET name = $2
-    //     RETURNING *",
-    //    [email, name]
-    // );
-
-    // TODO: create a session or JWT cookie
-    // res.cookie("session", jwt, { httpOnly: true });
 
     res.redirect(frontendURL);
   } catch (e) {

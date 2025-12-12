@@ -1,29 +1,13 @@
-// Development API endpoint
+// API endpoint for dev and prod
 const API = "/api";
 
-// Production API endpoint
-// const API = "https://archer-slack.onrender.com/api";
+let storedUsername = "";
 
-let storedUsername = localStorage.getItem("username") || "";
 let userChannel = localStorage.getItem("channel") || "cs1";
 let channelNames = ["cs1", "adv", "art"];
 
-let keystrokes = [];
-
 // control whether or not you can see delete functionality
 let adminMode = false;
-
-function loadName() {
-    if (localStorage.getItem("username")) {
-        document.getElementById("name").value = localStorage.getItem("username");
-        storedUsername = localStorage.getItem("username");
-    }
-}
-
-document.getElementById("name").addEventListener("change", e => {
-    localStorage.setItem("username", e.target.value);
-    storedUsername = e.target.value;
-});
 
 function changeChannel(channel) {
     // save selected channel
@@ -43,6 +27,11 @@ function changeChannel(channel) {
 
     // refresh
     loadMessages(channel);
+}
+
+function turnOnAdminMode() {
+    adminMode = true;
+    document.getElementById("deleteButtons").style.visibility = "visible"; 
 }
 
 async function loadMessages(channel=userChannel) {
@@ -166,8 +155,16 @@ function generateHTML(messages) {
 }
 
 async function sendMessage() {
+    if (!window.user) {
+        alert("You must be logged in to send messages.");
+        return;
+    }
+
     const channel = localStorage.getItem("channel");
-    const username = localStorage.getItem("username") || document.getElementById("name").value;
+    let username = storedUsername;
+    if (username === "Kelly Lougheed") {
+        username = "Ms. Lougheed";
+    }
     const message = document.getElementById("input").value;
     const isCode = document.getElementById("isCode").checked;
 
@@ -189,17 +186,6 @@ async function sendMessage() {
     loadMessages();
 }
 
-function toggleAdminMode() {
-    if (adminMode) {
-        adminMode = false;
-        document.getElementById("deleteButtons").style.visibility = "hidden";
-    } else {
-        adminMode = true;
-        document.getElementById("deleteButtons").style.visibility = "visible"; 
-    }
-    loadMessages();
-}
-
 async function clearMessages() {
     await fetch(`${API}/messages/clear`, { method: "DELETE", credentials: "include" });
     loadMessages(); // reload
@@ -215,17 +201,9 @@ async function logout() {
     method: "POST",
     credentials: "include"
   });
+  window.user = null;
   checkLogin(); // refresh status
 }
-
-document.addEventListener("keydown", e => {
-    keystrokes.push(e.key);
-    let text = keystrokes.join("");
-    if (text.endsWith("adminmode")) {
-        toggleAdminMode();
-        keystrokes = [];
-    }
-});
 
 async function checkLogin() {
 
@@ -234,15 +212,24 @@ async function checkLogin() {
   const signOutBtn = document.getElementById("signOutBtn");
 
   // Default
-  loginStatus.textContent = "Not logged in";
+  loginStatus.textContent = "Not logged in. You cannot post.";
   signInBtn.style.display = "inline";
   signOutBtn.style.display = "none";
+  window.user = null;
 
   try {
     const res = await fetch(`${API}/me`, {
       credentials: "include"
     });
     const user = await res.json();
+
+    if (user.name == "Kelly Lougheed") {
+        turnOnAdminMode();
+    }
+
+    // Store username
+    storedUsername = user ? user.name : "";
+    window.user = user;
 
     if (user) {
       loginStatus.textContent = "Logged in as " + user.name;
@@ -256,7 +243,6 @@ async function checkLogin() {
 
 checkLogin();
 
-//loadName();
 changeChannel(userChannel);
 loadMessages(userChannel);
 
