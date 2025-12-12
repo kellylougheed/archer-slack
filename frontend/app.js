@@ -9,9 +9,6 @@ let storedUsername = "";
 let userChannel = localStorage.getItem("channel") || "cs1";
 let channelNames = ["cs1", "adv", "art"];
 
-// control whether or not you can see delete functionality
-let adminMode = false;
-
 function changeChannel(channel) {
     // save selected channel
     userChannel = channel;
@@ -34,6 +31,10 @@ function changeChannel(channel) {
         setTimeout(scrollToBottom, 200);
     });
 }
+
+// control whether or not you can see delete functionality
+// but the backend also checks admin status for delete requests
+let adminMode = false;
 
 function turnOnAdminMode() {
     adminMode = true;

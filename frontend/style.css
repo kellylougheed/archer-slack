@@ -40,6 +40,7 @@ pre, code {
   line-height: 25px;
   border: 1px solid #aaa;
   border-radius: 5px;
+  padding-right: 10px;
 }
 
 h1 {
@@ -109,15 +110,18 @@ div.message {
   background-color: var(--primary-color);
   z-index: 999;
   color: white;
+  box-sizing: border-box;
 }
 
 /* form stuff */
 textarea {
     margin-top: 5px;
-    width: 90%;
+    width: 100%;
+    max-width: 100%;
     height: 75px;
     font-family: var(--font-stack);
     box-sizing: border-box;
+    resize: vertical;
 }
 
 textarea, input[type="text"], input[type="checkbox"], button {
@@ -220,4 +224,17 @@ textarea, input[type="text"], button {
 
 #sendButton {
   margin-left: 10px;
+}
+
+
+/* CELL PHONES */
+@media (max-width: 580px) {
+  
+  /* whole messages container */
+  #messages {
+      padding-bottom: 175px;
+      padding-top: 100px;
+      min-height: 300px;
+  }
+
 }
