@@ -238,7 +238,11 @@ app.get("/auth/google/callback", async (req, res) => {
     }
     
     let emailUsername = email.split('@')[0]; // email username
-    // star out part of email for privacy
+    // remove last two chars (grad years) of emailUsername
+    if (emailUsername.length > 2) {
+      emailUsername = emailUsername.slice(0, -2);
+    }
+    // star out middle of email for privacy
     if (emailUsername.length > 2) {
       emailUsername = emailUsername.charAt(0) + '***' + emailUsername.charAt(emailUsername.length - 1);
     } else {
