@@ -3,6 +3,8 @@
 
 :root {
       --primary-color: #4A154B;
+      --link-color: #9146FF;
+      --link-hover-color: #B77FFF;
       --font-stack: "Lato", Arial, sans-serif;
 }
 
@@ -28,6 +30,17 @@ body {
 
 .messageBody {
   margin-left: 10px;
+}
+
+/* link styles */
+.messageBody a {
+  color: var(--link-color);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.messageBody a:hover {
+  color: var(--link-hover-color);
 }
 
 pre, code {

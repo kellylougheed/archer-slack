@@ -36,6 +36,23 @@ function changeChannel(channel) {
 // but the backend also checks admin status for delete requests
 let adminMode = false;
 
+function linkifyText(text) {
+    // Escape HTML to prevent XSS
+    const escapeHtml = (str) => {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+    };
+    
+    const escaped = escapeHtml(text);
+    
+    // Regex to detect URLs
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    
+    // Replace URLs with anchor tags
+    return escaped.replace(urlRegex, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+}
+
 function turnOnAdminMode() {
     adminMode = true;
     document.getElementById("deleteButtons").style.visibility = "visible"; 
@@ -117,8 +134,8 @@ function generateHTML(messages) {
         messageText.classList.add("messageBody");
 
         if (!m.is_code) {
-            // normal message lives in the div
-            messageText.textContent = m.message;
+            // normal message - linkify URLs
+            messageText.innerHTML = linkifyText(m.message);
             wrapper.appendChild(messageText);
         } else {
             messageText.classList.add("codeBody");
