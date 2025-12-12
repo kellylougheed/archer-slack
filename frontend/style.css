@@ -207,7 +207,6 @@ textarea, input[type="text"], button {
 #buttonGrid {
   display: flex;
   gap: 8px;
-  padding-right: 150px;
   align-items: center;
 }
 
