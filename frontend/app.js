@@ -1,8 +1,8 @@
 // Development API endpoint
-//const API = "https://studious-space-dollop-jjp6rp7w9q5hqp66-3000.app.github.dev/api";
+const API = "/api";
 
 // Production API endpoint
-const API = "https://archer-slack.onrender.com/api";
+// const API = "https://archer-slack.onrender.com/api";
 
 let storedUsername = localStorage.getItem("username") || "";
 let userChannel = localStorage.getItem("channel") || "cs1";
@@ -154,8 +154,6 @@ function generateHTML(messages) {
 
         messageAndDeleteContainer.appendChild(messageText);
 
-        console.log(storedUsername, m.username, adminMode);
-
         if (storedUsername == m.username || adminMode) {
             messageAndDeleteContainer.appendChild(deleteBtn);
         }
@@ -175,6 +173,7 @@ async function sendMessage() {
 
     await fetch(`${API}/messages`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
         channel,
@@ -202,18 +201,21 @@ function toggleAdminMode() {
 }
 
 async function clearMessages() {
-    await fetch(`${API}/messages/clear`, { method: "DELETE" });
+    await fetch(`${API}/messages/clear`, { method: "DELETE", credentials: "include" });
     loadMessages(); // reload
 }
 
 async function clearChannelMessages(channel) {
-    await fetch(`${API}/messages/channel/${channel}`, { method: "DELETE" });
+    await fetch(`${API}/messages/channel/${channel}`, { method: "DELETE", credentials: "include" });
     loadMessages(); // reload
 }
 
-async function deleteMessage(messageId) {
-    await fetch(`${API}/messages/${messageId}`, { method: "DELETE" });
-    loadMessages(); // reload
+async function logout() {
+  await fetch(`${API}/logout`, {
+    method: "POST",
+    credentials: "include"
+  });
+  checkLogin(); // refresh status
 }
 
 document.addEventListener("keydown", e => {
@@ -225,7 +227,36 @@ document.addEventListener("keydown", e => {
     }
 });
 
-loadName();
+async function checkLogin() {
+
+  const loginStatus = document.getElementById("loginStatus");
+  const signInBtn = document.getElementById("signInBtn");
+  const signOutBtn = document.getElementById("signOutBtn");
+
+  // Default
+  loginStatus.textContent = "Not logged in";
+  signInBtn.style.display = "inline";
+  signOutBtn.style.display = "none";
+
+  try {
+    const res = await fetch(`${API}/me`, {
+      credentials: "include"
+    });
+    const user = await res.json();
+
+    if (user) {
+      loginStatus.textContent = "Logged in as " + user.name;
+      signInBtn.style.display = "none";
+      signOutBtn.style.display = "inline";
+    }
+  } catch (e) {
+    console.error("checkLogin failed:", e);
+  }
+}
+
+checkLogin();
+
+//loadName();
 changeChannel(userChannel);
 loadMessages(userChannel);
 
