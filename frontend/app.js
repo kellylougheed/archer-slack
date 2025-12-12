@@ -1,29 +1,16 @@
 // Development API endpoint
-//const API = "https://studious-space-dollop-jjp6rp7w9q5hqp66-3000.app.github.dev/api";
+// const API = "/api";
 
 // Production API endpoint
 const API = "https://archer-slack.onrender.com/api";
 
-let storedUsername = localStorage.getItem("username") || "";
+let storedUsername = "";
+
 let userChannel = localStorage.getItem("channel") || "cs1";
 let channelNames = ["cs1", "adv", "art"];
 
-let keystrokes = [];
-
 // control whether or not you can see delete functionality
 let adminMode = false;
-
-function loadName() {
-    if (localStorage.getItem("username")) {
-        document.getElementById("name").value = localStorage.getItem("username");
-        storedUsername = localStorage.getItem("username");
-    }
-}
-
-document.getElementById("name").addEventListener("change", e => {
-    localStorage.setItem("username", e.target.value);
-    storedUsername = e.target.value;
-});
 
 function changeChannel(channel) {
     // save selected channel
@@ -43,6 +30,11 @@ function changeChannel(channel) {
 
     // refresh
     loadMessages(channel);
+}
+
+function turnOnAdminMode() {
+    adminMode = true;
+    document.getElementById("deleteButtons").style.visibility = "visible"; 
 }
 
 async function loadMessages(channel=userChannel) {
@@ -154,8 +146,6 @@ function generateHTML(messages) {
 
         messageAndDeleteContainer.appendChild(messageText);
 
-        console.log(storedUsername, m.username, adminMode);
-
         if (storedUsername == m.username || adminMode) {
             messageAndDeleteContainer.appendChild(deleteBtn);
         }
@@ -168,13 +158,22 @@ function generateHTML(messages) {
 }
 
 async function sendMessage() {
+    if (!window.user) {
+        alert("You must be logged in to send messages.");
+        return;
+    }
+
     const channel = localStorage.getItem("channel");
-    const username = localStorage.getItem("username") || document.getElementById("name").value;
+    let username = storedUsername;
+    if (username === "Kelly Lougheed") {
+        username = "Ms. Lougheed";
+    }
     const message = document.getElementById("input").value;
     const isCode = document.getElementById("isCode").checked;
 
     await fetch(`${API}/messages`, {
         method: "POST",
+        credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
         channel,
@@ -190,42 +189,63 @@ async function sendMessage() {
     loadMessages();
 }
 
-function toggleAdminMode() {
-    if (adminMode) {
-        adminMode = false;
-        document.getElementById("deleteButtons").style.visibility = "hidden";
-    } else {
-        adminMode = true;
-        document.getElementById("deleteButtons").style.visibility = "visible"; 
-    }
-    loadMessages();
-}
-
 async function clearMessages() {
-    await fetch(`${API}/messages/clear`, { method: "DELETE" });
+    await fetch(`${API}/messages/clear`, { method: "DELETE", credentials: "include" });
     loadMessages(); // reload
 }
 
 async function clearChannelMessages(channel) {
-    await fetch(`${API}/messages/channel/${channel}`, { method: "DELETE" });
+    await fetch(`${API}/messages/channel/${channel}`, { method: "DELETE", credentials: "include" });
     loadMessages(); // reload
 }
 
-async function deleteMessage(messageId) {
-    await fetch(`${API}/messages/${messageId}`, { method: "DELETE" });
-    loadMessages(); // reload
+async function logout() {
+  await fetch(`${API}/logout`, {
+    method: "POST",
+    credentials: "include"
+  });
+  window.user = null;
+  checkLogin(); // refresh status
 }
 
-document.addEventListener("keydown", e => {
-    keystrokes.push(e.key);
-    let text = keystrokes.join("");
-    if (text.endsWith("adminmode")) {
-        toggleAdminMode();
-        keystrokes = [];
+async function checkLogin() {
+
+  const loginStatus = document.getElementById("loginStatus");
+  const signInBtn = document.getElementById("signInBtn");
+  const signOutBtn = document.getElementById("signOutBtn");
+
+  // Default
+  loginStatus.textContent = "Not logged in. You cannot post.";
+  signInBtn.style.display = "inline";
+  signOutBtn.style.display = "none";
+  window.user = null;
+
+  try {
+    const res = await fetch(`${API}/me`, {
+      credentials: "include"
+    });
+    const user = await res.json();
+
+    if (user.name == "Kelly Lougheed") {
+        turnOnAdminMode();
     }
-});
 
-loadName();
+    // Store username
+    storedUsername = user ? user.name : "";
+    window.user = user;
+
+    if (user) {
+      loginStatus.textContent = "Logged in as " + user.name;
+      signInBtn.style.display = "none";
+      signOutBtn.style.display = "inline";
+    }
+  } catch (e) {
+    console.error("checkLogin failed:", e);
+  }
+}
+
+checkLogin();
+
 changeChannel(userChannel);
 loadMessages(userChannel);
 
