@@ -109,8 +109,12 @@ app.get("/api/messages", async (req, res) => {
   }
 });
 
-// DELETE /api/messages/clear - delete ALL messages
+// DELETE /api/messages/clear - delete ALL messages (admin only)
 app.delete("/api/messages/clear", async (req, res) => {
+  if (!req.session.user?.isAdmin) {
+    return res.status(403).json({ error: "admin_required" });
+  }
+  
   try {
     await pool.query("DELETE FROM messages;");
     res.json({ status: "cleared" });
@@ -120,8 +124,12 @@ app.delete("/api/messages/clear", async (req, res) => {
   }
 });
 
-// DELETE /api/messages/channel/:channel - delete all messages from a channel
+// DELETE /api/messages/channel/:channel - delete all messages from a channel (admin only)
 app.delete("/api/messages/channel/:channel", async (req, res) => {
+  if (!req.session.user?.isAdmin) {
+    return res.status(403).json({ error: "admin_required" });
+  }
+  
   const { channel } = req.params;
 
   try {
@@ -199,7 +207,7 @@ app.get("/auth/google/callback", async (req, res) => {
     const email = payload.email;
     const name = payload.name;
 
-    // sanitize data before storing
+    // censor data before storing
     const nameParts = name.split(' ');
     const firstName = nameParts[0];
     const lastInitial = nameParts.length > 1 ? nameParts[nameParts.length - 1][0] : '';
@@ -209,7 +217,7 @@ app.get("/auth/google/callback", async (req, res) => {
       displayName = "Ms. Lougheed";
     }
     
-    let emailUsername = email.split('@')[0]; // Just the part before @
+    let emailUsername = email.split('@')[0]; // email username
     // star out part of email for privacy
     if (emailUsername.length > 2) {
       emailUsername = emailUsername.charAt(0) + '***' + emailUsername.charAt(emailUsername.length - 1);
@@ -218,11 +226,13 @@ app.get("/auth/google/callback", async (req, res) => {
     }
 
     // store session and user with first name + last initial and censored email
+    const isAdmin = (displayName === "Ms. Lougheed");
+    
     req.session.user = { 
       email: emailUsername,
-      name: displayName 
+      name: displayName,
+      isAdmin: isAdmin
     };
-    // now this is the email and name coming in from the backend/google
     
     console.log("Setting session user:", req.session.user);
     console.log("Saving session for user:", displayName);
