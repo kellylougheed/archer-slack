@@ -1,8 +1,8 @@
 // Development API endpoint
 // const API = "/api";
 
-// Production API endpoint
-const API = "https://archer-slack.onrender.com/api";
+// Production API endpoint - use relative path since served from same domain
+const API = "/api";
 
 let storedUsername = "";
 

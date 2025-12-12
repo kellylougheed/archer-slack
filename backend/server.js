@@ -9,9 +9,9 @@ import path from "path";
 // const url = "https://studious-space-dollop-jjp6rp7w9q5hqp66-3000.app.github.dev";
 // const frontendURL = url;
 
-// Production
+// Production - serve frontend from backend
 const url = "https://archer-slack.onrender.com";
-const frontendURL = "https://archerslack.onrender.com";
+const frontendURL = url;
 
 const { Pool } = pkg;
 
@@ -22,8 +22,8 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Serve static files from frontend - comment in during DEVELOPMENT
-// app.use(express.static(path.join(process.cwd(), '../frontend')));
+// Serve static files from frontend
+app.use(express.static(path.join(process.cwd(), '../frontend')));
 
 // Cookie to remember user sessions
 app.use(session({
@@ -32,8 +32,8 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
     httpOnly: true,
-    secure: true, // required for cross-origin cookies over HTTPS
-    sameSite: 'none', // allow cross-origin cookies
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
     maxAge: 7 * 24 * 60 * 60 * 1000  // 7 days
   }
 }));
