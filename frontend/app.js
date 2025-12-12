@@ -258,9 +258,9 @@ function scrollToBottom() {
 checkLogin();
 
 changeChannel(userChannel);
-loadMessages(userChannel);
-
-// only scroll to bottom the first time
-scrollToBottom();
+loadMessages(userChannel).then(() => {
+    // scroll after initial load
+    setTimeout(scrollToBottom, 200);
+});
 
 setInterval(loadMessages, 3000);
