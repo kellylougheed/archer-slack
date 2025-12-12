@@ -182,7 +182,7 @@ async function sendMessage() {
     document.getElementById("input").value = "";
     document.getElementById("isCode").checked = false;
 
-    loadMessages();
+    await loadMessages();
     scrollToBottom();
 }
 
@@ -247,10 +247,12 @@ async function checkLogin() {
 }
 
 function scrollToBottom() {
-    window.scrollTo({
-      top: document.body.scrollHeight,
-      behavior: "smooth"
-    });
+    setTimeout(() => {
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: "smooth"
+        });
+    }, 150);
 }
 
 checkLogin();
