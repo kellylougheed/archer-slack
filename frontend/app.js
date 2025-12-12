@@ -230,7 +230,7 @@ async function checkLogin() {
     storedUsername = user ? user.name : "";
     window.user = user;
 
-    if (user.name == "Kelly Lougheed") {
+    if (storedUsername == "Kelly Lougheed") {
         turnOnAdminMode();
     }
 
