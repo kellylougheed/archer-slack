@@ -140,7 +140,8 @@ function generateHTML(messages) {
             deleteBtn = document.createElement("button");
             deleteBtn.classList.add("deleteButton");
             deleteBtn.textContent = "X";
-            deleteBtn.onclick = () => deleteMessage(m.id);
+            let msgId = m.id;
+            deleteBtn.onclick = () => deleteMessage(msgId);
             wrapper.appendChild(deleteBtn);
         }
 
