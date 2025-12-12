@@ -224,8 +224,9 @@ app.get("/auth/google/callback", async (req, res) => {
     };
     // now this is the email and name coming in from the backend/google
     
+    console.log("Setting session user:", req.session.user);
     console.log("Saving session for user:", displayName);
-    console.log("Session ID:", req.sessionID);
+    console.log("Session ID before save:", req.sessionID);
 
     // save session before redirect due to multiple domains issue
     req.session.save((err) => {
@@ -234,6 +235,8 @@ app.get("/auth/google/callback", async (req, res) => {
         return res.status(500).send("Session save failed");
       }
       console.log("Session saved successfully");
+      console.log("Session user after save:", req.session.user);
+      console.log("Session ID after save:", req.sessionID);
       res.redirect(frontendURL);
     });
   } catch (e) {
