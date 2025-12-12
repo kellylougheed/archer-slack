@@ -42,11 +42,13 @@ app.use(session({
   secret: process.env.SESSION_SECRET || "dev-secret",
   resave: false,
   saveUninitialized: false,
+  name: 'archer.sid', // Custom name to avoid conflicts
+  proxy: true, // Trust Render's proxy
   cookie: {
     httpOnly: true,
-    secure: true, // HTTPS on Render
+    secure: true,
     sameSite: 'lax',
-    maxAge: 7 * 24 * 60 * 60 * 1000  // 7 days
+    maxAge: 7 * 24 * 60 * 60 * 1000
   }
 }));
 
