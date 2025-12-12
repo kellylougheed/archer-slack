@@ -226,13 +226,13 @@ async function checkLogin() {
     });
     const user = await res.json();
 
-    if (user.name == "Kelly Lougheed") {
-        turnOnAdminMode();
-    }
-
     // Store username
     storedUsername = user ? user.name : "";
     window.user = user;
+
+    if (user.name == "Kelly Lougheed") {
+        turnOnAdminMode();
+    }
 
     if (user) {
       loginStatus.textContent = "Logged in as " + user.name;
