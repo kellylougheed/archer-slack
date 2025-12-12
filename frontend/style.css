@@ -189,18 +189,35 @@ textarea, input[type="text"], button {
 /* admin buttons container */
 #buttonGrid {
   display: flex;
-  align-items: center;
   gap: 8px;
   padding-right: 150px;
+  align-items: center;
 }
 
 /* push following buttons following first child to the right */
-#buttonGrid > button:first-child {
+#buttonGrid > button:second-child {
   margin-right: auto;
 }
 
 #deleteButtons {
   display: flex;
   gap: 8px;
+  justify-content: flex-end;
+  margin-left: auto;
   visibility: hidden;
+}
+
+/* Style the code checkbox */
+#buttonGrid input[type="checkbox"] {
+  transform: scale(1.2);
+  margin-right: 4px;
+}
+
+#buttonGrid label[for="isCode"] {
+  cursor: pointer;
+  user-select: none;
+}
+
+#sendButton {
+  margin-left: 10px;
 }
