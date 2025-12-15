@@ -75,6 +75,8 @@ function turnOnAdminMode() {
     document.getElementById("deleteButtons").style.visibility = "visible"; 
 }
 
+let prevNumMessages = 0;
+
 async function loadMessages(channel=userChannel) {
     const res = await fetch(`${API}/messages?channel=${channel}`);
     const messages = await res.json();
@@ -88,6 +90,14 @@ async function loadMessages(channel=userChannel) {
     }
 
     messagesDiv.appendChild(generateHTML(messages));
+
+    // check if there is a new message
+    if (messages.length > prevNumMessages) {
+        // if so, scroll to bottom
+        setTimeout(scrollToBottom, 150);
+
+        prevNumMessages = messages.length;
+    }
 }
 
 function generateHTML(messages) {
