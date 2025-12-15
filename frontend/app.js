@@ -37,20 +37,27 @@ function changeChannel(channel) {
 let adminMode = false;
 
 function linkifyText(text) {
-    // Escape HTML to prevent XSS
+    // escape html/malicious scripts by putting it as plain text into a div
     const escapeHtml = (str) => {
         const div = document.createElement('div');
         div.textContent = str;
         return div.innerHTML;
     };
     
-    const escaped = escapeHtml(text);
+    let escaped = escapeHtml(text);
     
-    // Regex to detect URLs
+    // regex for URL
     const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    const matches = escaped.match(urlRegex);
+
+    if (matches) {
+        for (const url of matches) {
+            escaped = escaped.replace(url, `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`);
+        }
+    }
     
-    // Replace URLs with anchor tags
-    return escaped.replace(urlRegex, '<a href="$1" target="_blank" rel="noopener noreferrer">$1</a>');
+    return escaped;
 }
 
 function turnOnAdminMode() {
