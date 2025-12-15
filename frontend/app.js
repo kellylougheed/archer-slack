@@ -4,8 +4,6 @@
 // Production API endpoint - use relative path since served from same domain
 const API = "/api";
 
-let storedUsername = "";
-
 let userChannel = localStorage.getItem("channel") || "adv";
 let channelNames = ["cs1", "adv", "art"];
 
@@ -171,10 +169,10 @@ function generateHTML(messages) {
 
         // delete button
         let deleteBtn;
-        if (storedUsername == m.username || adminMode) {
+        if (window.user?.name == m.username || adminMode) {
             deleteBtn = document.createElement("button");
             deleteBtn.classList.add("deleteButton");
-            deleteBtn.textContent = "X";
+            deleteBtn.textContent = "x";
             let msgId = m.id;
             deleteBtn.onclick = () => deleteMessage(msgId);
             wrapper.appendChild(deleteBtn);
@@ -182,7 +180,7 @@ function generateHTML(messages) {
 
         messageAndDeleteContainer.appendChild(messageText);
 
-        if (storedUsername == m.username || adminMode) {
+        if (window.user?.name == m.username || adminMode) {
             messageAndDeleteContainer.appendChild(deleteBtn);
         }
         
@@ -200,7 +198,7 @@ async function sendMessage() {
     }
 
     const channel = localStorage.getItem("channel");
-    let username = storedUsername;
+    let username = window.user.name;
     
     const message = document.getElementById("input").value;
     const isCode = document.getElementById("isCode").checked;
@@ -265,9 +263,6 @@ async function checkLogin() {
       credentials: "include"
     });
     const user = await res.json();
-
-    // Store username
-    storedUsername = user ? user.name : "";
     window.user = user;
 
     if (user?.isAdmin) {
