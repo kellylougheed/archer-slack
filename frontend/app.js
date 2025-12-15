@@ -60,6 +60,18 @@ function linkifyText(text) {
     return escaped;
 }
 
+function addReturns(text) {
+    const returns = text.match("\n");
+
+    if (returns) {
+        for (const ret of returns) {
+            text = text.replace(ret, `<br>`);
+        }
+    }
+    
+    return text;
+}
+
 function turnOnAdminMode() {
     adminMode = true;
     document.getElementById("deleteButtons").style.visibility = "visible"; 
@@ -141,8 +153,8 @@ function generateHTML(messages) {
         messageText.classList.add("messageBody");
 
         if (!m.is_code) {
-            // normal message - linkify URLs
-            messageText.innerHTML = linkifyText(m.message);
+            // normal message - linkify URLs and add returns
+            messageText.innerHTML = addReturns(linkifyText(m.message));
             wrapper.appendChild(messageText);
         } else {
             messageText.classList.add("codeBody");
