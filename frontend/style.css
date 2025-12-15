@@ -2,18 +2,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap');
 
 :root {
-      --primary-color: #4A154B;
-      --link-color: #9146FF;
-      --link-hover-color: #B77FFF;
-      --font-stack: "Lato", Arial, sans-serif;
+  --primary-color: #4A154B;
+  --link-color: #9146FF;
+  --link-hover-color: #B77FFF;
+  --font-stack: "Lato", Arial, sans-serif;
 }
 
 body {
-    font-family: var(--font-stack);
-    margin: 0;
-    border: 15px solid var(--primary-color);
-    height: 100%;
-    background-color: var(--primary-color);
+  font-family: var(--font-stack);
+  margin: 0;
+  border: 15px solid var(--primary-color);
+  height: 100%;
+  background-color: var(--primary-color);
 }
 
 .username {
@@ -128,38 +128,38 @@ div.message {
 
 /* form stuff */
 textarea {
-    margin-top: 5px;
-    width: 100%;
-    max-width: 100%;
-    height: 75px;
-    font-family: var(--font-stack);
-    box-sizing: border-box;
-    resize: vertical;
+  margin-top: 5px;
+  width: 100%;
+  max-width: 100%;
+  height: 75px;
+  font-family: var(--font-stack);
+  box-sizing: border-box;
+  resize: vertical;
 }
 
 textarea, input[type="text"], input[type="checkbox"], button {
-    background-color: white;
-    border: 1px solid #d0d0d0;
-    border-radius: 8px;
-    padding: 8px;
+  background-color: white;
+  border: 1px solid #d0d0d0;
+  border-radius: 8px;
+  padding: 8px;
 }
 
 input[type="checkbox"] {
-    background-color: #f0f0f0;
-    width: 18px;
-    height: 18px;
-    border-radius: 5px;
-    cursor: pointer;
+  background-color: #f0f0f0;
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 input[type="checkbox"]:checked {
-    background-color: var(--primary-color);
-    accent-color: var(--primary-color);
+  background-color: var(--primary-color);
+  accent-color: var(--primary-color);
 }
 
 button {
-    cursor: pointer;
-    font-family: var(--font-stack);
+  cursor: pointer;
+  font-family: var(--font-stack);
 }
 
 button:hover {
@@ -172,61 +172,60 @@ textarea, input[type="text"], button {
 }
 
 .noMessages {
-    text-align: center;
-    color: #666;
-    font-style: italic;
-    margin-top: 50px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  margin-top: 50px;
 }
 
 .usernameTimestampContainer {
-    margin-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 /* button next to each message */
 .deleteButton {
-    float: right;
-    background-color: white;
-    color: #666; 
-    border: none;
-    margin-left: 10px;
-    font-weight: bold;
+  float: right;
+  background-color: white;
+  color: #666; 
+  border: none;
+  margin-left: 10px;
+  font-weight: bold;
 }
 
 .deleteButton:hover {
-    color: red;
-    background-color: white;
+  color: red;
+  background-color: white;
 }
 
 .messageAndDeleteContainer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 /* admin buttons container */
 #buttonGrid {
   display: flex;
   gap: 8px;
-  align-items: center;
 }
 
 #deleteButtons {
-  display: flex;
   gap: 8px;
-  justify-content: flex-end;
   margin-left: auto;
   visibility: hidden;
 }
 
-/* Style the code checkbox */
+/* code checkbox */
 #buttonGrid input[type="checkbox"] {
   transform: scale(1.2);
   margin-right: 4px;
+  margin-top: 5px;
 }
 
 #buttonGrid label[for="isCode"] {
   cursor: pointer;
   user-select: none;
+  margin-top: 5px;
 }
 
 #sendButton {
@@ -243,9 +242,9 @@ textarea, input[type="text"], button {
   
   /* whole messages container */
   #messages {
-      padding-bottom: 175px;
-      padding-top: 100px;
-      min-height: 300px;
+    padding-bottom: 175px;
+    padding-top: 100px;
+    min-height: 300px;
   }
 
 }
