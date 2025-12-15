@@ -6,7 +6,7 @@ const API = "/api";
 
 let storedUsername = "";
 
-let userChannel = localStorage.getItem("channel") || "cs1";
+let userChannel = localStorage.getItem("channel") || "adv";
 let channelNames = ["cs1", "adv", "art"];
 
 function changeChannel(channel) {
