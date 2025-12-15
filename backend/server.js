@@ -16,21 +16,24 @@ const frontendURL = url;
 
 const { Pool } = pkg;
 
+// connects to DB
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false } // required by most hosted DBs
 });
 
+// to store sessions in DB
 const PgSession = connectPgSimple(session);
 
 const app = express();
 app.use(cors({
   origin: frontendURL,
-  credentials: true
+  credentials: true // allows cookies to be sent (needed for auth)
 }));
-app.use(express.json());
 
-// serve static files from frontend
+app.use(express.json()); // app can parse JSON
+
+// SERVING FRONTEND AT THE ROOT
 app.use(express.static(path.join(process.cwd(), '../frontend')));
 
 // cookie to remember user sessions
@@ -42,32 +45,37 @@ app.use(session({
   secret: process.env.SESSION_SECRET || "dev-secret",
   resave: false,
   saveUninitialized: false,
-  name: 'archer.sid', // Custom name to avoid conflicts
-  proxy: true, // Trust Render's proxy
+  name: 'archer.sid', // cookie name - custom to avoid conflicts
+  proxy: true, // trust Render's proxy
   cookie: {
     httpOnly: true,
     secure: true,
     sameSite: 'lax',
-    maxAge: 7 * 24 * 60 * 60 * 1000
+    maxAge: 7 * 24 * 60 * 60 * 1000 // 1 week
   }
 }));
 
-app.get("/", (req, res) => res.send("Backend + DB is running!"));
+// Testing
+// app.get("/", (req, res) => res.send("Backend + DB is running!"));
 
 // Test DB connection
-app.get("/test-db", async (req, res) => {
-  try {
-    const result = await pool.query("SELECT NOW()");
-    res.json(result.rows);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "db_error" });
-  }
-});
+// app.get("/test-db", async (req, res) => {
+//   try {
+//     const result = await pool.query("SELECT NOW()");
+//     res.json(result.rows);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ error: "db_error" });
+//   }
+// });
 
-app.post("/api/messages", async (req, res) => {
-  const { channel, username, message, isCode } = req.body;
-  //const username = req.session.user.name; // auto from login
+app.post("/api/messages", requireAuth, async (req, res) => {
+  const { channel, message, isCode } = req.body;
+  // get display name from google login - more secure
+  const username = req.session.user?.name;
+  if (!username) {
+    return res.status(500).json({ error: "session_invalid" });
+  }
 
   try {
     console.log("Incoming:", req.body);
@@ -93,6 +101,7 @@ function requireAuth(req, res, next) {
 app.get("/api/messages", async (req, res) => {
   const channel = req.query.channel;
 
+  // $1 refers to first parameter and prevents SQL injection
   try {
     const result = await pool.query(
       `SELECT id, timestamp, username, message, is_code
@@ -100,7 +109,7 @@ app.get("/api/messages", async (req, res) => {
        WHERE channel = $1
        ORDER BY timestamp ASC
        LIMIT 500`,
-      [channel]
+      [channel] // values for parameters - $1
     );
     res.json(result.rows);
   } catch (err) {
@@ -116,7 +125,7 @@ app.delete("/api/messages/clear", async (req, res) => {
   }
   
   try {
-    await pool.query("DELETE FROM messages;");
+    await pool.query("DELETE FROM messages;"); // no * needed for DELETE in SQL
     res.json({ status: "cleared" });
   } catch (err) {
     console.error(err);
@@ -186,6 +195,7 @@ app.get("/auth/google", (req, res) => {
   const redirect_uri = url + "/auth/google/callback";
   const client_id = process.env.GOOGLE_CLIENT_ID;
   
+  // what we can get from google
   const scopes = [
     "openid",
     "profile",
@@ -249,9 +259,10 @@ app.get("/auth/google/callback", async (req, res) => {
       emailUsername = emailUsername.charAt(0) + '***';
     }
 
-    // store session and user with first name + last initial and censored email
+    // only I have admin privileges
     const isAdmin = (displayName === "Ms. Lougheed");
     
+    // store session and user with first name + last initial and censored email
     req.session.user = { 
       email: emailUsername,
       name: displayName,
