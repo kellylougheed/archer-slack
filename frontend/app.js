@@ -92,6 +92,7 @@ async function loadMessages(channel=userChannel) {
     messagesDiv.appendChild(generateHTML(messages));
 
     // check if there is a new message
+    console.log("Prev: " + prevNumMessages, "Current: " + messages.length);
     if (messages.length > prevNumMessages) {
         // if so, scroll to bottom
         setTimeout(scrollToBottom, 150);
