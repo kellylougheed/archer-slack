@@ -108,7 +108,7 @@ app.get("/api/messages", async (req, res) => {
        FROM messages
        WHERE channel = $1
        ORDER BY timestamp ASC
-       LIMIT 100`,
+       LIMIT 50`,
       [channel] // values for parameters - $1
     );
     res.json(result.rows);
