@@ -7,12 +7,12 @@ import connectPgSimple from "connect-pg-simple";
 import path from "path";
 
 // Development
-// const url = "https://studious-space-dollop-jjp6rp7w9q5hqp66-3000.app.github.dev";
-// const frontendURL = url;
+const url = "https://studious-space-dollop-jjp6rp7w9q5hqp66-3000.app.github.dev";
+const frontendURL = url;
 
 // Production - serve frontend from backend
-const url = "https://archer-slack.onrender.com";
-const frontendURL = url;
+// const url = "https://archer-slack.onrender.com";
+// const frontendURL = url;
 
 const { Pool } = pkg;
 

@@ -82,13 +82,20 @@ async function loadMessages(channel=userChannel) {
     const messages = await res.json();
     console.log("Fetched messages:", messages);
 
-    const messagesDiv = document.getElementById("messages");
+    // if there are more than x messages, take last x
+    const numToRemove = 25;
+    if (messages.length > numToRemove) {
+        console.log("Removing all but " + numToRemove);
+        messages.splice(0, messages.length - numToRemove); // cuts off first numToRemove elements
+    }
 
+    const messagesDiv = document.getElementById("messages");
     // clear existing messages
     while (messagesDiv.firstChild) {
         messagesDiv.removeChild(messagesDiv.firstChild);
     }
 
+    // add new messages
     messagesDiv.appendChild(generateHTML(messages));
 
     // check if there is a new message
