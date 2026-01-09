@@ -25,8 +25,7 @@ function changeChannel(channel) {
 
     // refresh
     loadMessages(userChannel).then(() => {
-        // scroll after initial load
-        setTimeout(scrollToBottom, 200);
+        scrollToBottom();
     });
 }
 
@@ -67,6 +66,14 @@ function turnOnAdminMode() {
     document.getElementById("deleteButtons").style.visibility = "visible"; 
 }
 
+async function writeClipboardText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
 let prevNumMessages = 0;
 
 async function loadMessages(channel=userChannel) {
@@ -94,7 +101,7 @@ async function loadMessages(channel=userChannel) {
     console.log("Prev: " + prevNumMessages, "Current: " + messages.length);
     if (messages.length > prevNumMessages) {
         // if so, scroll to bottom
-        setTimeout(scrollToBottom, 150);
+        scrollToBottom();
 
         prevNumMessages = messages.length;
     }
@@ -168,9 +175,30 @@ function generateHTML(messages) {
             messageText.classList.add("codeBody");
             // wrap code in pre, code
             const pre = document.createElement("pre");
+
+            // icon that will copy the code when you click on it
+
+            const icon = document.createElement("span");
+            icon.classList.add("copyIcon", "tooltip");
+            icon.textContent = "📋";
+
+            // tooltip
+            const span = document.createElement("span");
+            span.classList.add("tooltiptext");
+            span.textContent = "Copy code";
+
+            icon.appendChild(span);
+
+            const theMessage = m.message;
+            icon.onclick = (e) => {
+                writeClipboardText(theMessage);
+                e.target.children[0].textContent = "Code copied!"
+            }
+            pre.appendChild(icon);
+
             const code = document.createElement("code");
 
-            code.textContent = m.message;
+            code.textContent = theMessage;
             pre.appendChild(code);
             pre.classList.add("messageBody");
             messageText.appendChild(pre);
@@ -292,18 +320,17 @@ async function checkLogin() {
 function scrollToBottom() {
     setTimeout(() => {
         window.scrollTo({
-            top: document.body.scrollHeight,
+            top: document.body.scrollHeight + 1000, // compensate for tooltip adding height
             behavior: "smooth"
         });
-    }, 150);
+    }, 250);
 }
 
 checkLogin();
 
 changeChannel(userChannel);
 loadMessages(userChannel).then(() => {
-    // scroll after initial load
-    setTimeout(scrollToBottom, 200);
+    scrollToBottom();
 });
 
 setInterval(loadMessages, 3000);
