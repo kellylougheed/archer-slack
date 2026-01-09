@@ -194,7 +194,7 @@ function generateHTML(messages) {
                 writeClipboardText(theMessage);
                 e.target.children[0].textContent = "Code copied!"
             }
-            pre.appendChild(icon);
+            messageText.appendChild(icon);
 
             const code = document.createElement("code");
 
