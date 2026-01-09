@@ -59,16 +59,7 @@ function linkifyText(text) {
 }
 
 function addReturns(text) {
-    const returns = text.match("\n");
-    console.log(returns);
-
-    if (returns) {
-        for (const ret of returns) {
-            text = text.replaceAll(ret, `<br>`);
-        }
-    }
-    
-    return text;
+    return text.replaceAll("\n", `<br>`);
 }
 
 function turnOnAdminMode() {
