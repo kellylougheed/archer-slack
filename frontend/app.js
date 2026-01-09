@@ -320,7 +320,7 @@ async function checkLogin() {
 function scrollToBottom() {
     setTimeout(() => {
         window.scrollTo({
-            top: document.body.scrollHeight,
+            top: document.body.scrollHeight + 1000, // compensate for tooltip adding height
             behavior: "smooth"
         });
     }, 250);
