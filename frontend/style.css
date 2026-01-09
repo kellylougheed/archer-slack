@@ -48,6 +48,14 @@ pre, code {
   font-family: monospace;
 }
 
+pre.messageBody {
+  margin-right: 40px;
+}
+
+.copyIcon {
+  margin-top: 5px;
+}
+
 .messageBody.codeBody {
   background-color: #f4f4f4;
   line-height: 25px;
