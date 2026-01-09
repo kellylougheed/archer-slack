@@ -253,9 +253,10 @@ textarea, input[type="text"], button {
 
 /* Tooltip text */
 .tooltiptext {
+  font-family: var(--font-stack);
   visibility: hidden;
-  width: 130px;
-  background-color: black;
+  width: 110px;
+  background-color: rgba(0, 0, 0, 0.75);
   color: #ffffff;
   text-align: center;
   border-radius: 6px;
