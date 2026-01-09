@@ -60,10 +60,11 @@ function linkifyText(text) {
 
 function addReturns(text) {
     const returns = text.match("\n");
+    console.log(returns);
 
     if (returns) {
         for (const ret of returns) {
-            text = text.replace(ret, `<br>`);
+            text = text.replaceAll(ret, `<br>`);
         }
     }
     
