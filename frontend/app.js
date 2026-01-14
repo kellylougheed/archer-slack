@@ -329,8 +329,5 @@ function scrollToBottom() {
 checkLogin();
 
 changeChannel(userChannel);
-loadMessages(userChannel).then(() => {
-    scrollToBottom();
-});
 
 setInterval(loadMessages, 3000);
