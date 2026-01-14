@@ -99,17 +99,7 @@ async function loadMessages(channel=userChannel) {
     }
 
     if (!window.user) {
-        const messagesDiv = document.getElementById("messages");
-
-        // clear existing messages
-        while (messagesDiv.firstChild) {
-            messagesDiv.removeChild(messagesDiv.firstChild);
-        }
-
-        const noMsg = document.createElement("div");
-        noMsg.classList.add("noMessages");
-        noMsg.textContent = "Please log in to see messages.";
-        messagesDiv.appendChild(noMsg);
+        displayNoMessages("Please log in to see messages. (If you just logged in, wait a few seconds...)");
     } else {
         displayMessages(messages);
     }
@@ -355,7 +345,7 @@ function scrollToBottom() {
     }, 250);
 }
 
-function loadingMessage() {
+function displayNoMessages(str) {
     const messagesDiv = document.getElementById("messages");
 
     // clear existing messages
@@ -365,11 +355,11 @@ function loadingMessage() {
 
     const noMsg = document.createElement("div");
     noMsg.classList.add("noMessages");
-    noMsg.textContent = "Loading...";
+    noMsg.textContent = str;
     messagesDiv.appendChild(noMsg);
 }
 
-loadingMessage();
+displayNoMessages("Loading...");
 checkLogin();
 
 changeChannel(userChannel);
