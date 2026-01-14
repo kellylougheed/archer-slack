@@ -107,9 +107,11 @@ app.get("/api/messages", async (req, res) => {
       `SELECT id, timestamp, username, message, is_code
        FROM messages
        WHERE channel = $1
-       ORDER BY timestamp ASC
+       ORDER BY timestamp DESC
        LIMIT 50`,
-      [channel] // values for parameters - $1
+      [channel]
+      // values for parameters - $1
+      // in DESC order here but going to reverse it in app.js
     );
     res.json(result.rows);
   } catch (err) {
