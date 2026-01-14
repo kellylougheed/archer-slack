@@ -108,7 +108,7 @@ async function loadMessages(channel=userChannel) {
 
         const noMsg = document.createElement("div");
         noMsg.classList.add("noMessages");
-        noMsg.textContent = "Please log in to see messages. (If you just logged in, please wait a few seconds...)";
+        noMsg.textContent = "Please log in to see messages.";
         messagesDiv.appendChild(noMsg);
     } else {
         displayMessages(messages);
@@ -355,7 +355,21 @@ function scrollToBottom() {
     }, 250);
 }
 
-waitMessage();
+function loadingMessage() {
+    const messagesDiv = document.getElementById("messages");
+
+    // clear existing messages
+    while (messagesDiv.firstChild) {
+        messagesDiv.removeChild(messagesDiv.firstChild);
+    }
+
+    const noMsg = document.createElement("div");
+    noMsg.classList.add("noMessages");
+    noMsg.textContent = "Loading...";
+    messagesDiv.appendChild(noMsg);
+}
+
+loadingMessage();
 checkLogin();
 
 changeChannel(userChannel);
