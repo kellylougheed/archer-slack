@@ -98,6 +98,11 @@ async function loadMessages(channel=userChannel) {
         console.log(messages);
     }
 
+    displayMessages(messages);
+    
+}
+
+function displayMessages(messages) {
     const messagesDiv = document.getElementById("messages");
     // clear existing messages
     while (messagesDiv.firstChild) {
@@ -108,7 +113,7 @@ async function loadMessages(channel=userChannel) {
     messagesDiv.appendChild(generateHTML(messages));
 
     // check if there is a new message
-    console.log("Prev: " + prevNumMessages, "Current: " + messages.length);
+    // console.log("Prev: " + prevNumMessages, "Current: " + messages.length);
     if (messages.length > prevNumMessages) {
         // if so, scroll to bottom
         scrollToBottom();
