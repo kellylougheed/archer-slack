@@ -355,6 +355,7 @@ function scrollToBottom() {
     }, 250);
 }
 
+waitMessage();
 checkLogin();
 
 changeChannel(userChannel);
