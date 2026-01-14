@@ -78,14 +78,24 @@ let prevNumMessages = 0;
 
 async function loadMessages(channel=userChannel) {
     const res = await fetch(`${API}/messages?channel=${channel}`);
-    const messages = await res.json();
+    let messages = await res.json();
     console.log("Fetched messages:", messages);
+
+    // reverse the order of messages bc the SQL query is timestamp DESC + getting top 50
+    // otherwise should write a SQL query for timestamp ASC + bottom 50 messages
+    messages = messages.reverse();
+    
+    // console.log("Messages reversed: " + messages);
 
     // if there are more than x messages, take last x
     const numToRemove = 25;
     if (messages.length > numToRemove) {
         console.log("Removing all but " + numToRemove);
-        messages.splice(0, messages.length - numToRemove); // cuts off first numToRemove elements
+
+        // the earlier messages appear first in the array
+        // so we want the LAST numToRemove messages...
+        messages = messages.slice(messages.length - numToRemove, messages.length);
+        console.log(messages);
     }
 
     const messagesDiv = document.getElementById("messages");
@@ -329,8 +339,5 @@ function scrollToBottom() {
 checkLogin();
 
 changeChannel(userChannel);
-loadMessages(userChannel).then(() => {
-    scrollToBottom();
-});
 
 setInterval(loadMessages, 3000);
