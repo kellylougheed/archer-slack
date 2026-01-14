@@ -98,7 +98,21 @@ async function loadMessages(channel=userChannel) {
         console.log(messages);
     }
 
-    displayMessages(messages);
+    if (!window.user) {
+        const messagesDiv = document.getElementById("messages");
+
+        // clear existing messages
+        while (messagesDiv.firstChild) {
+            messagesDiv.removeChild(messagesDiv.firstChild);
+        }
+
+        const noMsg = document.createElement("div");
+        noMsg.classList.add("noMessages");
+        noMsg.textContent = "Please log in to see messages. (If you just logged in, please wait a few seconds...)";
+        messagesDiv.appendChild(noMsg);
+    } else {
+        displayMessages(messages);
+    }
     
 }
 
