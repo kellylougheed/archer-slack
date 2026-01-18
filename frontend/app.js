@@ -74,18 +74,23 @@ async function writeClipboardText(text) {
   }
 }
 
-let prevNumMessages = 0;
+// loadMessages CALLS displayMessages CALLS generateHTML
+
+let prevFirstMessage;
 
 async function loadMessages(channel=userChannel) {
     const res = await fetch(`${API}/messages?channel=${channel}`);
     let messages = await res.json();
     console.log("Fetched messages:", messages);
 
+    // Initialize prevFirstMessage ONLY on first page load
+    if (messages.length > 0 && prevFirstMessage === undefined) {
+        prevFirstMessage = messages[0];
+    }
+
     // reverse the order of messages bc the SQL query is timestamp DESC + getting top 50
     // otherwise should write a SQL query for timestamp ASC + bottom 50 messages
     messages = messages.reverse();
-    
-    // console.log("Messages reversed: " + messages);
 
     // if there are more than x messages, take last x
     const numToRemove = 25;
@@ -116,14 +121,28 @@ function displayMessages(messages) {
     // add new messages
     messagesDiv.appendChild(generateHTML(messages));
 
-    // check if there is a new message
-    // console.log("Prev: " + prevNumMessages, "Current: " + messages.length);
-    if (messages.length > prevNumMessages) {
-        // if so, scroll to bottom
-        scrollToBottom();
+    let scrollHeight = document.documentElement.scrollHeight;
+    let scrollDiff = 800;
+    console.log("Scroll: ", window.scrollY);
+    console.log("Scroll height: ", scrollHeight);
 
-        prevNumMessages = messages.length;
+    // NEW MESSAGE DETECTION
+    // check if the latest message is the same
+    if (prevFirstMessage !== undefined && messages[messages.length-1].id != prevFirstMessage.id) {
+        console.log("New message detected");
+
+        // UPDATE prevFirstMessage only if another new message is found
+        prevFirstMessage = messages[messages.length-1]
+
+        // Scroll down to bottom to show new message
+        // IF you are already at the bottom
+        if (window.scrollY > scrollHeight - scrollDiff) {
+            console.log("You're near the bottom of the page");
+            scrollToBottom();
+        }
     }
+
+
 }
 
 function generateHTML(messages) {
@@ -248,6 +267,8 @@ function generateHTML(messages) {
     return container;
 }
 
+// sendMessage CALLS loadMessages, scrollToBottom
+
 async function sendMessage() {
     if (!window.user) {
         alert("You must be logged in to send messages.");
@@ -276,6 +297,7 @@ async function sendMessage() {
     document.getElementById("isCode").checked = false;
 
     await loadMessages();
+    // comment out scrollToBottom when testing new message behavior (not sent by the user)
     scrollToBottom();
 }
 
