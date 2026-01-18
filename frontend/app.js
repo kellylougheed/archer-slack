@@ -140,8 +140,13 @@ function displayMessages(messages) {
             console.log("You're near the bottom of the page");
             scrollToBottom();
         }
-    }
 
+        // temporarily show an asterisk in the tab to indicate new message
+        document.title = "* Archer Slack";
+        setTimeout(() => {
+            document.title = "Archer Slack";
+        }, 3000);
+    }
 
 }
 
