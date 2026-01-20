@@ -330,6 +330,7 @@ async function checkLogin() {
       loginStatus.textContent = "Logged in as " + user.name;
       signInBtn.style.display = "none";
       signOutBtn.style.display = "inline";
+      scrollToBottom();
     }
   } catch (e) {
     console.error("checkLogin failed:", e);
