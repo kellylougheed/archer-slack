@@ -330,6 +330,7 @@ async function logout() {
   checkLogin(); // refresh status
 }
 
+// returns TRUE (success) or FALSE (not logged in)
 async function checkLogin() {
 
   const loginStatus = document.getElementById("loginStatus");
@@ -357,11 +358,12 @@ async function checkLogin() {
       loginStatus.textContent = "Logged in as " + user.name;
       signInBtn.style.display = "none";
       signOutBtn.style.display = "inline";
-      scrollToBottom();
+      return true;
     }
   } catch (e) {
     console.error("checkLogin failed:", e);
   }
+  return false;
 }
 
 function scrollToBottom() {
@@ -387,9 +389,16 @@ function displayNoMessages(str) {
     messagesDiv.appendChild(noMsg);
 }
 
+async function start() {
+    console.log("start");
+    let loggedIn = await checkLogin();
+    console.log(loggedIn);
+    if (loggedIn) {
+        changeChannel(userChannel); // includes scrollToBottom
+    }
+    setInterval(loadMessages, 3000);
+}
+
 displayNoMessages("Loading...");
-checkLogin();
 
-changeChannel(userChannel);
-
-setInterval(loadMessages, 3000);
+start();
