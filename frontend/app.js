@@ -47,22 +47,47 @@ function formatText(text) {
 }
 
 function imagify(text) {
-    // TODO
-    return text;
-}
-
-function linkify(text) {
-    // regex for URL
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
-
-    const matches = text.match(urlRegex);
-
-    console.log("Matches ", matches);
+    matches = getURLMatches(text);
 
     if (matches) {
         for (const url of matches) {
-            text = text.replace(url, `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`);
-            //console.log("Here is the text now: ", text);
+            if (isImage(url)) {
+                text = text.replace(url, `<img src="${url}" width="500">`);
+            }
+        }
+    }
+
+
+    return text;
+}
+
+function getURLMatches(text) {
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const matches = text.match(urlRegex);
+    return matches;
+}
+
+function isImage(url) {
+    const extensions = [".gif", ".png", ".jpg", ".jpeg"]
+    for (const ex of extensions) {
+        if (url.endsWith(ex)) {
+            return true;
+        }
+    }
+    return false;
+}
+
+function linkify(text) {
+    matches = getURLMatches(text);
+    
+    if (matches) {
+        for (const url of matches) {
+            // IGNORE URL IF IT IS AN IMAGE!!!!!
+            if (!isImage(url)) {
+                text = text.replace(url, `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`);
+                //console.log("Here is the text now: ", text);
+            }
+            
         }
     }
 
