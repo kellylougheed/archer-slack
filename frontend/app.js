@@ -33,32 +33,44 @@ function changeChannel(channel) {
 // but the backend also checks admin status for delete requests
 let adminMode = false;
 
-function linkifyText(text) {
+function formatText(text) {
     // escape html/malicious scripts by putting it as plain text into a div
-    const escapeHtml = (str) => {
-        const div = document.createElement('div');
-        div.textContent = str;
-        return div.innerHTML;
-    };
-    
-    let escaped = escapeHtml(text);
-    
-    // regex for URL
-    const urlRegex = /(https?:\/\/[^\s]+)/g;
+    const div = document.createElement('div');
+    div.textContent = text;
+    let escaped = div.innerHTML;
 
-    const matches = escaped.match(urlRegex);
+    escaped = addReturns(escaped);
+    escaped = linkify(escaped);
+    escaped = imagify(escaped);
 
-    if (matches) {
-        for (const url of matches) {
-            escaped = escaped.replace(url, `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`);
-        }
-    }
-    
     return escaped;
 }
 
+function imagify(text) {
+    // TODO
+    return text;
+}
+
+function linkify(text) {
+    // regex for URL
+    const urlRegex = /(https?:\/\/[^\s]+)/g;
+
+    const matches = text.match(urlRegex);
+
+    console.log("Matches ", matches);
+
+    if (matches) {
+        for (const url of matches) {
+            text = text.replace(url, `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`);
+            //console.log("Here is the text now: ", text);
+        }
+    }
+
+    return text;
+}
+
 function addReturns(text) {
-    return text.replaceAll("\n", `<br>`);
+    return text.replaceAll("\n", ` <br> `);
 }
 
 function turnOnAdminMode() {
@@ -211,8 +223,8 @@ function generateHTML(messages) {
         messageText.classList.add("messageBody");
 
         if (!m.is_code) {
-            // normal message - linkify URLs and add returns
-            messageText.innerHTML = addReturns(linkifyText(m.message));
+            // normal message - format (linkify URLs, render images and add returns)
+            messageText.innerHTML = formatText(m.message);
             wrapper.appendChild(messageText);
         } else {
             messageText.classList.add("codeBody");
