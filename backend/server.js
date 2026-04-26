@@ -7,7 +7,7 @@ import connectPgSimple from "connect-pg-simple";
 import path from "path";
 
 // Development
-// const url = "https://studious-space-dollop-jjp6rp7w9q5hqp66-3000.app.github.dev";
+// const url = "https://laughing-space-spoon-97gv6g544qvcxjwr.github.dev/";
 // const frontendURL = url;
 
 // Production - serve frontend from backend
