@@ -39,11 +39,28 @@ function formatText(text) {
     div.textContent = text;
     let escaped = div.innerHTML;
 
-    escaped = addReturns(escaped);
-    escaped = linkify(escaped);
-    escaped = imagify(escaped);
-
+    // giphy API functionality
+    if (escaped.startsWith("/giphy")) {
+        const searchTerm = escaped.slice(7).trim();
+        escaped = getGIF(searchTerm);
+    } else {
+        // normal message
+        escaped = addReturns(escaped);
+        escaped = linkify(escaped);
+        escaped = imagify(escaped);
+    }
     return escaped;
+}
+
+async function getGIF(searchTerm) {
+    // Frontend calls backend, which calls Giphy (to hide API key)
+    fetch(`/api/giphy/search?q=${searchTerm}`)
+        .then(res => res.json())
+        .then(data => {
+                // console.log(data.data);
+                const gifURL = data.data[0].images.original.url;
+                return '<img src="' + gifURL + '" width="500">';
+        });
 }
 
 function imagify(text) {
@@ -52,7 +69,7 @@ function imagify(text) {
     if (matches) {
         for (const url of matches) {
             if (isImage(url)) {
-                text = text.replace(url, `<img src="${url}" width="500">`);
+                text = text.replaceAll(url, `<img src="${url}" width="500">`);
             }
         }
     }
@@ -84,7 +101,7 @@ function linkify(text) {
         for (const url of matches) {
             // IGNORE URL IF IT IS AN IMAGE!!!!!
             if (!isImage(url)) {
-                text = text.replace(url, `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`);
+                text = text.replaceAll(url, `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`);
                 //console.log("Here is the text now: ", text);
             }
             

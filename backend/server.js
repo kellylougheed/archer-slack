@@ -7,12 +7,12 @@ import connectPgSimple from "connect-pg-simple";
 import path from "path";
 
 // Development
-// const url = "https://laughing-space-spoon-97gv6g544qvcxjwr.github.dev/";
-// const frontendURL = url;
+const url = "https://laughing-space-spoon-97gv6g544qvcxjwr.github.dev/";
+const frontendURL = url;
 
 // Production - serve frontend from backend
-const url = "https://archer-slack.onrender.com";
-const frontendURL = url;
+// const url = "https://archer-slack.onrender.com";
+// const frontendURL = url;
 
 const { Pool } = pkg;
 
@@ -310,6 +310,24 @@ app.post("/api/logout", (req, res) => {
     }
     res.json({ status: "logged_out" });
   });
+});
+
+app.get('/api/giphy/search', async (req, res) => {
+  const query = req.query.q;
+  
+  if (!query) {
+    return res.status(400).json({ error: 'Query required' });
+  }
+  
+  try {
+    const response = await fetch(
+      `https://api.giphy.com/v1/gifs/search?q=${encodeURIComponent(query)}&api_key=${process.env.GIPHY_API_KEY}`
+    );
+    const data = await response.json();
+    res.json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'Giphy API error' });
+  }
 });
 
 const port = process.env.PORT || 3000;
