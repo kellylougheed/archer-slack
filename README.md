@@ -7,3 +7,5 @@ Internal tool. Classroom version of Slack with three channels for three differen
 For new codespace: `cd backend && npm install`
 
 To run app: `cd backend && node server.js`
+
+Might need to manually deploy new commits.
